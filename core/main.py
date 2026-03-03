@@ -10,6 +10,8 @@ import os
 
 nlp=spacy.load("es_core_news_sm")
 
+#information banks
+
 if os.path.exists("rules.txt"):
     with open("rules.txt", "r", encoding="utf-8") as f:
         instruction = f.read()
@@ -28,8 +30,38 @@ if os.path.exists("chat_history.json"):
 else:
     history = []
 
+if os.path.exists("multimodal.json"):
+    with open("multimodal.json", "r", encoding="utf-8") as f:
+        modal= json.load(f)  
+else:
+    modal=[]  
+
+if os.path.exists("multimodalA.json"):
+    with open("multimodalA.json", "r", encoding="utf-8") as f:
+        modalaprove= json.load(f)  
+else:
+    modalaprove=[]  
+#variables
+
 clock = None
 sclock = None
+
+def multimodal(user):
+    global modal
+    global modalaprove
+    doc=nlp(user.lower())
+    lemma=[token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
+    modal.extend(lemma)
+    with open("multimodal.json", "w", encoding="utf-8") as f:
+        json.dump(lemma, f, ensure_ascii=False, indent=4)
+    filter=set(modal)
+    for word in filter:
+        count=modal.count(word)
+        if count>=5 and word not in modalaprove:
+            with open("rules.txt", "a") as f:
+                f.write(f"El usuario suele hablar de: {word}\n")
+            with open("multimodal.json", "w", encoding="utf-8") as f:
+                json.dump(modalaprove, f, ensure_ascii=False, indent=4)
 
 def agent_view():
     distractions=["msedge.exe","chrome.exe","whatsapp.exe"]
@@ -89,7 +121,6 @@ def agent_actions():
     if not silence:
         sclock= None
     
-
 def agent_AI (message):
     global AI_score, instruction
     base = "Eres un asistente técnico experto."
@@ -122,6 +153,7 @@ def agent_AI (message):
     
     except Exception as e:
         return f"fail with ollama model {str(e)}"
+    
 def memory_agent(user,respondAI):
 
     global AI_score, instruction
@@ -145,6 +177,7 @@ if __name__ == "__main__":
                 try:
                     respondAI=agent_AI(user)
                     print(f"<<AI>>:  {respondAI}")
+                    multimodal(user)
 
                     feedback=input("THAT's ANSWER IS WELL (1) OR BAD (0)")
 
@@ -177,6 +210,3 @@ if __name__ == "__main__":
             agent_actions()
             print("I SEE YOU >:V")
         time.sleep(5)
-
-
-
