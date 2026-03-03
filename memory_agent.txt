@@ -139,3 +139,28 @@ Recuerda que no estás solo. Hay personas que se preocupan por ti y quieren ayud
 
 ¿En qué puedo ayudarte hoy? 😁 
   <Score>  105
+<03/03/2026 11:21:23>  <USER>  me gusta pokemon  <AI>  ¡Genial! 😊 ¿Qué te gusta de Pokémon? 
+
+¿Te gusta la estrategia de los combates? ¿Te fascinan las diferentes criaturas y sus evoluciones? ¿O simplemente te gusta la historia y los personajes? 
+ 
+¡Cuéntame más! ⚡️ 
+  <Score>  106
+<03/03/2026 11:25:35>  <USER>  mi pokemon favorito es garchomp  <AI>  ¡Garchomp es un Pokémon increíble! 💪 Es poderoso, rápido y tiene un diseño formidable. 
+
+¿Qué es lo que más te gusta de Garchomp? ¿Su velocidad, su fuerza o su diseño? 
+  <Score>  107
+<03/03/2026 11:41:17>  <USER>  voy a programar un pokemon  <AI>  ¡Genial!  😜  
+
+Para ayudarte a programar un Pokémon, necesito más información. 🤓
+
+**Aquí tienes algunas preguntas que te pueden ayudar a definir tu idea:**
+
+* **¿Qué tipo de Pokémon quieres programar?** (tipo fuego, agua, etc.) 
+* **¿Qué características quieres darle a tu Pokémon?** (poderes, habilidades, diseño, etc.)
+* **¿Qué tipo de juego quieres crear?** (juegos de rol, estrategia, simulación, etc.)
+* **¿Qué quieres que pueda hacer tu Pokémon?** (interactuar con otros Pokémon, explorar un mundo, etc.)
+
+Con más información, podré darte ideas más específicas. 💪 
+ 
+ ¡Estoy emocionado de ayudarte con tu proyecto! 😊 
+  <Score>  108

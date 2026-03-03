@@ -53,14 +53,15 @@ def multimodal(user):
     lemma=[token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
     modal.extend(lemma)
     with open("multimodal.json", "w", encoding="utf-8") as f:
-        json.dump(lemma, f, ensure_ascii=False, indent=4)
+        json.dump(modal, f, ensure_ascii=False, indent=4)
     filter=set(modal)
     for word in filter:
         count=modal.count(word)
         if count>=5 and word not in modalaprove:
             with open("rules.txt", "a") as f:
                 f.write(f"El usuario suele hablar de: {word}\n")
-            with open("multimodal.json", "w", encoding="utf-8") as f:
+                modalaprove.append(word)
+            with open("multimodalA.json", "w", encoding="utf-8") as f:
                 json.dump(modalaprove, f, ensure_ascii=False, indent=4)
 
 def agent_view():
