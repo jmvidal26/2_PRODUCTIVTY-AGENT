@@ -4,6 +4,9 @@
 #include <map>
 #include <regex>
 
+//WARING DON'T TOUCH THIS CODE, IT'S OKAY, JESUS REMEMBER THIS
+
+
 int main() {
     std::map<std::string, int> historialScores;
     std::ifstream BaseD("memory_agent.txt"); 
@@ -31,7 +34,7 @@ int main() {
         return 1;
     }
 
-    // --- ANÁLISIS DE MEMORIA ---
+    // --- MEMORY ANALSYS ---
     std::cout << "--- EVOLUCION DE LA IA (Orden Cronologico) ---" << std::endl;
     
     int primerScore = -1;
@@ -47,7 +50,7 @@ int main() {
         std::cout << "[" << date << "] -> Score: " << AI_score << std::endl;
     }
 
-    // Lógica de "Entrenamiento"
+    // Logic of "training"
     std::cout << "\n--- RESUMEN ---" << std::endl;
     if (primerScore != -1) {
         if (ultimoScore > primerScore) {

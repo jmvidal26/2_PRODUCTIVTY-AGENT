@@ -5,12 +5,19 @@ import time
 import spacy
 import json
 import os
+import sys
 
-# tha's load the spanish language
+#============================================================#
+#------------------------VERSION-0.03.1-----by JesVid.DEV----#
+#============================================================#
+#-------------------------PROtOTYPE_UI-----------------------#
+#============================================================#
+#============================================================#
 
-nlp=spacy.load("es_core_news_sm")
 
-#information banks
+#============================================================#
+#-------------------INFORMATION BANKS------------------------#
+#============================================================#
 
 if os.path.exists("rules.txt"):
     with open("rules.txt", "r", encoding="utf-8") as f:
@@ -41,19 +48,45 @@ if os.path.exists("multimodalA.json"):
         modalaprove= json.load(f)  
 else:
     modalaprove=[]  
-#variables
+
+#============================================================#
+#-------------------------VARIABLES--------------------------#
+#============================================================#
 
 clock = None
 sclock = None
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+# tha's load the spanish language
+
+nlp=spacy.load("es_core_news_sm")
+
+
+
+
+
+
+
+
+
+
+
+#============================================================#
+#-----------------------MODE-FEATURE-------------------------#
+#============================================================#
 
 def multimodal(user):
     global modal
     global modalaprove
     doc=nlp(user.lower())
+#TAKE THE MOST IMPORTANT WORDS
     lemma=[token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
+#SAFE THE IMPORTANT WORDS IN MODAL
     modal.extend(lemma)
     with open("multimodal.json", "w", encoding="utf-8") as f:
         json.dump(modal, f, ensure_ascii=False, indent=4)
+
+#COUNT THE MODES AND, IF THIS IS SAFE A CONCURRENCE TOPIC
     filter=set(modal)
     for word in filter:
         count=modal.count(word)
@@ -64,10 +97,25 @@ def multimodal(user):
             with open("multimodalA.json", "w", encoding="utf-8") as f:
                 json.dump(modalaprove, f, ensure_ascii=False, indent=4)
 
+
+
+
+
+
+
+
+
+
+
+
+#============================================================#
+#--------------------MONITORING-FEATURE----------------------#
+#============================================================#
+
 def agent_view():
     distractions=["msedge.exe","chrome.exe","whatsapp.exe"]
 
-    #psutil.process_iter watch the cpu
+#psutil.process_iter watch the cpu
 
     for process in psutil.process_iter(['name']):
         try:
@@ -75,13 +123,29 @@ def agent_view():
                 print(process.info['name'])
                 return "!HEY PEREZOSO, EMPIEZA A PROGRAMAR"
     
-        except:"ESO ERES TODO UN FULLSTACK"
+        except Exception as e:
+            return f"ERROR {e}"
     
-    #that's watch the cpu use, it'very importatn for the comprenseation is dev is programming or he's sleeping
+#that's watch the cpu use, it'very importatn for the comprenseation is dev is programming or he's sleeping
     cpu_usage = psutil.cpu_percent(interval=1)
     if cpu_usage < 5:
         return "ESTAS ACTIVO?"
     return "TODO BIEN SIGUE ASI"
+
+
+
+
+
+
+
+
+
+
+
+
+#============================================================#
+#-----------------------ACTIONS-FEATURE----------------------#
+#============================================================#
 
 def agent_actions():
     global clock, sclock
@@ -94,21 +158,23 @@ def agent_actions():
             if process.info["name"] in distractions:
                 print(process.info['name'])
                 f_distractions = True
-        except:
-            return "ESO ERES TODO UN FULLSTACK"
-        
-    
+        except Exception as e:
+            return f"ERROR {e}"
+            
     if f_distractions:
         if clock is None:
             clock=time.time()
         s_elapsed = time.time() - clock
         if s_elapsed>=10:            
             os.system(f"taskkill /F /IM {process.info['name']}")
-
-            return "!HEY PEREZOSO, EMPIEZA A PROGRAMAR"
     else:
         clock=None
     
+
+
+
+#IN PROGRESS TO CHANGE
+
     if not f_distractions:
         silence=True
         if silence:
@@ -121,14 +187,29 @@ def agent_actions():
                 print(f"<<AI>>:  {res}")
     if not silence:
         sclock= None
-    
+
+
+
+
+
+
+
+
+
+
+
+
+#============================================================#
+#----------------------AI_CHAT-FEATURE-----------------------#
+#============================================================#
+
 def agent_AI (message):
     global AI_score, instruction
     base = "Eres un asistente técnico experto."
     feedback_alert = " El usuario no está satisfecho, sé más breve." if AI_score < 105 else ""
     
     prompt_final = f"{base} {feedback_alert}\nREGLAS ADICIONALES:\n{instruction}\nUsuario: {message}"
-    # that's convert the message in MINS
+    # that's convert the message in MINS and process the msj, but 
     doc= nlp(message.lower())
 
     #that process the message
@@ -137,7 +218,7 @@ def agent_AI (message):
     messages_for_ollama = [{'role': 'system', 'content': prompt_final}]
 
     history.append({'role': 'user', 'content': message})
-    if len(history)>10:
+    if len(history)>20:
         history.pop(0)
     
     messages_for_ollama.extend(history)
@@ -155,6 +236,20 @@ def agent_AI (message):
     except Exception as e:
         return f"fail with ollama model {str(e)}"
     
+
+
+
+
+
+
+
+
+
+
+#============================================================#
+#----------------------MEMORY-FEATURE------------------------#
+#============================================================#    
+    
 def memory_agent(user,respondAI):
 
     global AI_score, instruction
@@ -162,47 +257,49 @@ def memory_agent(user,respondAI):
     try:
         with open("memory_agent.txt", "a", encoding="utf-8") as BaseD:
             BaseD.write(f'\n<{date}>  <USER>  {user}  <AI>  {respondAI}  <Score>  {AI_score}')
-    except:
-        print("THERE IS/ARE A FAIL/S")
+    except Exception as e:
+        print(f"THERE IS/ARE A FAIL/S {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+#============================================================#
+#----------------------RUN\TESTING_MODULE--------------------#
+#============================================================#
 
 if __name__ == "__main__":
     while True:
         status= agent_view()
         print(status)
         if not "!" in status:
-            user= input("<<YOU>>  ")
-            if user.lower() in ("exit","salir"):
-                break
+            if os.path.exists("ask.txt"):
+                with open("ask.txt","r",encoding="utf-8") as f:
+                    user=f.read()
 
-            else:
-                try:
-                    respondAI=agent_AI(user)
-                    print(f"<<AI>>:  {respondAI}")
-                    multimodal(user)
+            try:
+                respondAI=agent_AI(user)
+                multimodal(user)
+                with open("response.txt","w",encoding="utf-8") as f:
+                    f.write(f"{respondAI}")
+                with open("finished.txt","w",encoding="utf-8") as f:
+                    f.write(f"")
 
-                    feedback=input("THAT's ANSWER IS WELL (1) OR BAD (0)")
-
-                    if feedback in ("1","0"):
-                        try:
-                            if feedback=="1":
-                                AI_score+=1
-                            else:
-                                AI_score-=1
-                                newlaw=input("INGRESE LA NUEVA INSTRUCCION:  ")
-                                instruction += f"\n- {newlaw}"
-                                with open("rules.txt", "a") as f:
-                                    f.write(f"{newlaw}\n")
-                            with open("Score.txt", 'w',encoding="utf-8") as archive:
-                                archive.write(str(AI_score))
-                        except:
-                            print("THERE IS/ARE A FAIL/S")
-                    agent_actions()
-                except:
-                    print("THERE IS/ARE A FAIL/S")
+                os.remove("ask.txt")
+                agent_actions()
+            except Exception as e:
+                print(f"THERE IS/ARE A FAIL/S {e}")
 
             memory_agent(user,respondAI)
             print("\n--- REPORTE DE EVOLUCIÓN (C++) ---")
-            ruta_cpp = r"c:\Users\Jesus el mas guapo\OneDrive\Desktop\productivity agent\output\module_cpp\memory.exe"
+            ruta_cpp = os.path.join(BASE_PATH, "output", "module_cpp", "memory.exe")
             resultado = subprocess.run([ruta_cpp], capture_output=True, text=True, cwd=os.getcwd())
             print(resultado.stdout)
             time.sleep(5)
