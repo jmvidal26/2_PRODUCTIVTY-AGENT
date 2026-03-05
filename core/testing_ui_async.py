@@ -2,6 +2,7 @@ import asyncio
 import spacy
 import pygame
 import os
+import time
 
 #============================================================#
 #------------------------VERSION-0.02.0-----by JesVid.DEV----#
@@ -10,6 +11,30 @@ import os
 #============================================================#
 #============================================================#
 
+
+                #=================================#
+                #------------FRIEND-MODE----------#
+                #=================================#
+
+async def Mevak():
+#CALL THE PROCESS WITHOUT INTERRUMPTIONS
+    process = await asyncio.create_subprocess_exec('python', 'actions.py',stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE)
+    
+#WAIT THAT FINISHED IN THE BACKGROUND
+    stdout, stderr = await process.communicate()
+    
+    if process.returncode == 0:
+        print("Mevak terminó con éxito")
+    else:
+        print(f"Error en Mevak: {stderr.decode()}")
+
+
+                #=================================#
+                #-------FRIEND-MODE-SUPORT--------#
+                #=================================#
+
+async def MVK_unlock():
+    await Mevak()
 
                 #=================================#
                 #--------------ASYNC--------------#
@@ -73,16 +98,20 @@ async def main():
     writting=True
     pon=False
     new_rule=False
+    last_input_time = time.time()
 
     running=True
     while running:
+
+        current_time = time.time()
+        time_elapsed = current_time - last_input_time
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
             if event.type == pygame.KEYDOWN and not pon and writting:
-
+                last_input_time = current_time
     #SAFE THE REQUEST
                 if event.key == pygame.K_RETURN:
                     #OPTIMIZATION WITH NATURAL LANGUAGE PROCESSING
@@ -161,6 +190,11 @@ async def main():
 
         elif not waiting and writting:
             text=input_text
+            if input_text=="" and time_elapsed > 10:
+                last_input_time = current_time
+                asyncio.create_task(MVK_unlock())
+                waiting=False
+                pon=True
 
         screen.fill("white")
         text_ = font.render(text, True, "black")

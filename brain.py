@@ -8,7 +8,7 @@ import os
 import sys
 
 #============================================================#
-#------------------------VERSION-0.03.1-----by JesVid.DEV----#
+#------------------------VERSION-0.04.0-----by JesVid.DEV----#
 #============================================================#
 #-------------------------PROtOTYPE_UI-----------------------#
 #============================================================#
@@ -96,86 +96,6 @@ def multimodal(user):
                 modalaprove.append(word)
             with open("multimodalA.json", "w", encoding="utf-8") as f:
                 json.dump(modalaprove, f, ensure_ascii=False, indent=4)
-
-
-
-
-
-
-
-
-
-
-
-
-#============================================================#
-#--------------------MONITORING-FEATURE----------------------#
-#============================================================#
-
-def agent_view():
-    distractions=["msedge.exe","chrome.exe","whatsapp.exe"]
-
-#psutil.process_iter watch the cpu
-
-    for process in psutil.process_iter(['name']):
-        try:
-            if process.info["name"] in distractions:
-                print(process.info['name'])
-                return "!HEY PEREZOSO, EMPIEZA A PROGRAMAR"
-    
-        except Exception as e:
-            return f"ERROR {e}"
-    
-#that's watch the cpu use, it'very importatn for the comprenseation is dev is programming or he's sleeping
-    cpu_usage = psutil.cpu_percent(interval=1)
-    if cpu_usage < 5:
-        return "ESTAS ACTIVO?"
-    return "TODO BIEN SIGUE ASI"
-
-
-
-
-
-
-
-
-
-
-
-
-#============================================================#
-#-----------------------ACTIONS-FEATURE----------------------#
-#============================================================#
-
-def agent_actions():
-    global clock, sclock
-    distractions=["msedge.exe","chrome.exe","whatsapp.exe"]
-    f_distractions=False
-    silence=False
-
-    for process in psutil.process_iter(['name']):
-        try:
-            if process.info["name"] in distractions:
-                print(process.info['name'])
-                f_distractions = True
-        except Exception as e:
-            return f"ERROR {e}"
-            
-    if f_distractions:
-        if clock is None:
-            clock=time.time()
-        s_elapsed = time.time() - clock
-        if s_elapsed>=10:            
-            os.system(f"taskkill /F /IM {process.info['name']}")
-    else:
-        clock=None
-    
-
-
-
-#IN PROGRESS TO CHANGE
-
-    
 
 
 
@@ -286,14 +206,8 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"THERE IS/ARE A FAIL/S {e}")
 
-        memory_agent(user,respondAI)
-        print("\n--- REPORTE DE EVOLUCIÓN (C++) ---")
-        ruta_cpp = os.path.join(BASE_PATH, "output", "module_cpp", "memory.exe")
-        resultado = subprocess.run([ruta_cpp], capture_output=True, text=True, cwd=os.getcwd())
-        print(resultado.stdout)
-        time.sleep(5)
-        os.system("cls")
-    else:
-        #agent_actions()
-        print("I SEE YOU >:V")
-    time.sleep(5)
+    memory_agent(user,respondAI)
+    print("\n--- REPORTE DE EVOLUCIÓN (C++) ---")
+    ruta_cpp = os.path.join(BASE_PATH, "output", "module_cpp", "memory.exe")
+    resultado = subprocess.run([ruta_cpp], capture_output=True, text=True, cwd=os.getcwd())
+    print(resultado.stdout)
