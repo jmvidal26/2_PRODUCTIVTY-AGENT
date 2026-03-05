@@ -2,8 +2,6 @@ import asyncio
 import spacy
 import pygame
 import os
-import sys
-import time
 
 #============================================================#
 #------------------------VERSION-0.02.0-----by JesVid.DEV----#
