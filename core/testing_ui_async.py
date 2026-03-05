@@ -12,39 +12,6 @@ import time
 #============================================================#
 #============================================================#
 
-                #=================================#
-                #-----------VARIABLES-------------#
-                #=================================#
-#prototype 1
-pygame.init()
-screen = pygame.display.set_mode((1200, 800))
-clocking = pygame.time.Clock()
-running=True
-#load the font
-font = pygame.font.SysFont('arial', 20)
-#text user
-input_text=""
-nlp=spacy.load("es_core_news_sm")
-feedback=""
-
-                #=================================#
-                #-----------BANKS.INFO------------#
-                #=================================#
-
-if os.path.exists("Score.txt"):
-    with open("Score.txt", 'r',encoding="utf-8") as archive:
-        AI_score=int(archive.read())
-else:
-    AI_score=100
-
-                #=================================#
-                #--------------FLAGS--------------#
-                #=================================#
-
-waiting=False
-writting=True
-pon=False
-new_rule=False
 
                 #=================================#
                 #--------------ASYNC--------------#
@@ -76,6 +43,40 @@ async def brain_unlock():
 #============================================================#
 
 async def main():
+                    #=================================#
+                    #-----------VARIABLES-------------#
+                    #=================================#
+    #prototype 1
+    pygame.init()
+    screen = pygame.display.set_mode((1200, 800))
+    clocking = pygame.time.Clock()
+    #load the font
+    font = pygame.font.SysFont('arial', 20)
+    #text user
+    input_text=""
+    nlp=spacy.load("es_core_news_sm")
+    feedback=""
+
+                    #=================================#
+                    #-----------BANKS.INFO------------#
+                    #=================================#
+
+    if os.path.exists("Score.txt"):
+        with open("Score.txt", 'r',encoding="utf-8") as archive:
+            AI_score=int(archive.read())
+    else:
+        AI_score=100
+
+                    #=================================#
+                    #--------------FLAGS--------------#
+                    #=================================#
+
+    waiting=False
+    writting=True
+    pon=False
+    new_rule=False
+
+    running=True
     while running:
         
         for event in pygame.event.get():
@@ -111,9 +112,6 @@ async def main():
 
             elif event.type == pygame.KEYDOWN and pon:
                 if event.key == pygame.K_SPACE and not new_rule:
-                    os.remove("finished.txt")
-                    os.remove("response.txt")
-                    os.remove("provitional.txt")
                     writting=True
                     pon=False 
                 elif event.key== pygame.K_0 and not new_rule:
@@ -169,3 +167,5 @@ async def main():
 
 if __name__=="__main__":
     asyncio.run(main())
+
+

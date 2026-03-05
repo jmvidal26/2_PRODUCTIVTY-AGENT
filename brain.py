@@ -175,18 +175,7 @@ def agent_actions():
 
 #IN PROGRESS TO CHANGE
 
-    if not f_distractions:
-        silence=True
-        if silence:
-            if sclock is None:
-                sclock=time.time()
-            elapsed = time.time() - sclock
-            if elapsed>=10:
-                user="El usuario esta aburrido o programando, di algo para seguir en actividad"
-                res=agent_AI(user)
-                print(f"<<AI>>:  {res}")
-    if not silence:
-        sclock= None
+    
 
 
 
@@ -276,35 +265,35 @@ def memory_agent(user,respondAI):
 #============================================================#
 
 if __name__ == "__main__":
-    while True:
-        status= agent_view()
-        print(status)
-        if not "!" in status:
-            if os.path.exists("ask.txt"):
-                with open("ask.txt","r",encoding="utf-8") as f:
-                    user=f.read()
 
-            try:
-                respondAI=agent_AI(user)
-                multimodal(user)
-                with open("response.txt","w",encoding="utf-8") as f:
-                    f.write(f"{respondAI}")
-                with open("finished.txt","w",encoding="utf-8") as f:
-                    f.write(f"")
+    #status= agent_view()
+    #print(status)
+    #if not "!" in status:
+    if os.path.exists("ask.txt"):
+        with open("ask.txt","r",encoding="utf-8") as f:
+            user=f.read()
 
-                os.remove("ask.txt")
-                agent_actions()
-            except Exception as e:
-                print(f"THERE IS/ARE A FAIL/S {e}")
+    try:
+        respondAI=agent_AI(user)
+        multimodal(user)
+        with open("response.txt","w",encoding="utf-8") as f:
+            f.write(f"{respondAI}")
+        with open("finished.txt","w",encoding="utf-8") as f:
+            f.write(f"")
 
-            memory_agent(user,respondAI)
-            print("\n--- REPORTE DE EVOLUCIÓN (C++) ---")
-            ruta_cpp = os.path.join(BASE_PATH, "output", "module_cpp", "memory.exe")
-            resultado = subprocess.run([ruta_cpp], capture_output=True, text=True, cwd=os.getcwd())
-            print(resultado.stdout)
-            time.sleep(5)
-            os.system("cls")
-        else:
-            agent_actions()
-            print("I SEE YOU >:V")
+        os.remove("ask.txt")
+        #agent_actions()
+    except Exception as e:
+        print(f"THERE IS/ARE A FAIL/S {e}")
+
+        memory_agent(user,respondAI)
+        print("\n--- REPORTE DE EVOLUCIÓN (C++) ---")
+        ruta_cpp = os.path.join(BASE_PATH, "output", "module_cpp", "memory.exe")
+        resultado = subprocess.run([ruta_cpp], capture_output=True, text=True, cwd=os.getcwd())
+        print(resultado.stdout)
         time.sleep(5)
+        os.system("cls")
+    else:
+        #agent_actions()
+        print("I SEE YOU >:V")
+    time.sleep(5)
