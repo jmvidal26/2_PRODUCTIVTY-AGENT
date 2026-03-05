@@ -6,7 +6,7 @@ import sys
 import time
 
 #============================================================#
-#------------------------VERSION-0.01.3-----by JesVid.DEV----#
+#------------------------VERSION-0.02.0-----by JesVid.DEV----#
 #============================================================#
 #-------------------------PROtOTYPE_UI-----------------------#
 #============================================================#
@@ -34,10 +34,10 @@ async def call_brain():
                 #=================================#
 
 async def brain_unlock():
-    global waiting, writting
+    global waiting, writting,pon
     await call_brain()
     waiting = False
-
+    pon=True
 #============================================================#
 #-------------------------RUN/DEBUGGIN-----------------------#
 #============================================================#
@@ -83,7 +83,7 @@ async def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            if event.type == pygame.KEYDOWN and not pon:
+            if event.type == pygame.KEYDOWN and not pon and writting:
 
     #SAFE THE REQUEST
                 if event.key == pygame.K_RETURN:
@@ -109,15 +109,20 @@ async def main():
                     if len(input_text) < 100 and writting:
                         input_text += event.unicode
 
-
-            elif event.type == pygame.KEYDOWN and pon:
+            elif event.type == pygame.KEYDOWN and pon and not writting:
                 if event.key == pygame.K_SPACE and not new_rule:
                     writting=True
                     pon=False 
-                elif event.key== pygame.K_0 and not new_rule:
+                elif event.key==pygame.K_0 and not new_rule:
                     AI_score-=1
                     new_rule=True
                     feedback = ""
+
+                elif event.key== pygame.K_1 and not new_rule:
+                    AI_score+=1
+                    writting=True
+                    pon=False    
+
                 if new_rule:
                     if event.key == pygame.K_RETURN:
                         if os.path.exists("rules.txt"):
@@ -127,28 +132,30 @@ async def main():
                         pon=False       
                     else:
                         feedback+= event.unicode
-
-                elif event.key== pygame.K_1 and not new_rule:
-                    AI_score+=1
-                    writting=True
-                    pon=False         
+     
                 with open("Score.txt", 'w',encoding="utf-8") as archive:
                             archive.write(str(AI_score))
-                os.remove("finished.txt")
-                os.remove("response.txt")
-                os.remove("provitional.txt")
+
+                for file in ["finished.txt", "response.txt", "provitional.txt"]:
+                    if os.path.exists(file):
+                        os.remove(file)
+                input_text=""
 
 
         if waiting and not writting and not pon:
             puntos = (pygame.time.get_ticks() // 500) % 4
             text = "Esperando" + "." * puntos
+                                
+            if os.path.exists("finished.txt"):
+                waiting=False
 
         elif not waiting and not writting and not pon:
             if os.path.exists("finished.txt") and os.path.exists("response.txt"):
                 with open("response.txt","r",encoding="utf-8") as f:
                     text=f.read()
-                    pon=True
-        elif not waiting and not writting and pon:
+                pon=True
+                
+        elif not waiting and not writting and pon and new_rule:
             text=feedback
 
                   
