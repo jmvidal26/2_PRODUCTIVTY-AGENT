@@ -193,18 +193,17 @@ if __name__ == "__main__":
         with open("ask.txt","r",encoding="utf-8") as f:
             user=f.read()
 
-    try:
-        respondAI=agent_AI(user)
-        multimodal(user)
-        with open("response.txt","w",encoding="utf-8") as f:
-            f.write(f"{respondAI}")
-        with open("finished.txt","w",encoding="utf-8") as f:
-            f.write(f"")
+        try:
+            respondAI=agent_AI(user)
+            multimodal(user)
+            with open("response.txt","w",encoding="utf-8") as f:
+                f.write(f"{respondAI}")
+            with open("finished.txt","w",encoding="utf-8") as f:
+                f.write(f"")
 
-        os.remove("ask.txt")
-        #agent_actions()
-    except Exception as e:
-        print(f"THERE IS/ARE A FAIL/S {e}")
+            os.remove("ask.txt")
+        except Exception as e:
+            print(f"THERE IS/ARE A FAIL/S {e}")
 
     memory_agent(user,respondAI)
     print("\n--- REPORTE DE EVOLUCIÓN (C++) ---")

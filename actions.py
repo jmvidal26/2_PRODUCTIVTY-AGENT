@@ -112,9 +112,6 @@ async def Mevak():
             with open("ask.txt", "w", encoding="utf-8") as f:
                     f.write(" ".join(lemas))
 
-            if os.path.exists("ears.txt"):
-                os.remove("ears.txt")
-
 
 if __name__=="__main__":
     clock=None
@@ -123,6 +120,10 @@ if __name__=="__main__":
     while not os.path.exists("ears.txt"):
         agent_actions()
 
-    asyncio.run(Mevak())
+    
     if os.path.exists("ears.txt"):
-                os.remove("ears.txt")
+        if os.path.exists("eyes.txt"):
+            os.remove("eyes.txt")
+        asyncio.run(Mevak())
+        if os.path.exists("ask.txt"):
+            os.remove("ears.txt")

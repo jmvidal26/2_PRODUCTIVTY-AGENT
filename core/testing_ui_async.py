@@ -1,4 +1,5 @@
 import asyncio
+from ntpath import exists
 import spacy
 import pygame
 import os
@@ -8,7 +9,7 @@ import ollama
 #============================================================#
 #------------------------VERSION-0.02.0-----by JesVid.DEV----#
 #============================================================#
-#-------------------------PROtOTYPE_UI-----------------------#
+#-------------------------PROTOTYPE_UI-----------------------#
 #============================================================#
 #============================================================#
 
@@ -191,14 +192,14 @@ async def main():
 
         elif not waiting and writting:
             text=input_text
-            if input_text=="" and time_elapsed > 10:
+            if input_text=="" and time_elapsed > 250 :
                 last_input_time = current_time
                 asyncio.create_task(MVK_unlock())
-                asyncio.create_task(brain_unlock())
-                if os.path.exists("finished.txt") and os.path.exists("response.txt"):
-                    with open("response.txt","r",encoding="utf-8") as f:
-                        text=f.read()
+                if os.path.exists("ask.txt"):
+                    asyncio.create_task(brain_unlock())
+                print("...")
                 waiting=False
+                writting=False
                 pon=True
 
         screen.fill("white")
