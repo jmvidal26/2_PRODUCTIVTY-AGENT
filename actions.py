@@ -29,15 +29,17 @@ def agent_view():
                         f.write(f"{process.info['name']}")
                 else:
                     with open("eyes.txt",'w',encoding="utf-8") as f:
-                        f.write(f"{process.info['name']}")  
+                        f.write(f"{process.info['name']}") 
+                return True
+ 
         except Exception as e:
             return f"ERROR {e}"
     
 #that's watch the cpu use, it'very importatn for the comprenseation is dev is programming or he's sleeping
     cpu_usage = psutil.cpu_percent(interval=1)
     if cpu_usage < 5:
-        return "ESTAS ACTIVO?"
-    return "TODO BIEN SIGUE ASI"
+        return True
+    return False
 
 
 
@@ -50,44 +52,21 @@ def agent_view():
 #============================================================#
 
 def agent_actions():
-            
-    if os.path.exists("eyes.txt"):
-        with open("eyes.txt","r",encoding="utf-8") as f:
-            process=f.read()          
-            os.system(f"taskkill /F /IM {process}")
-        if os.path.exists("eye.txt"):
-            os.remove("eyes.txt")
-    else:
+    value=agent_view() 
+    if value:
+        if os.path.exists("eyes.txt"):
+            with open("eyes.txt","r",encoding="utf-8") as f:
+                process=f.read()          
+                os.system(f"taskkill /F /IM {process}")
+                time.sleep(2)
+                if os.path.exists("eyes.txt"):
+                    os.remove("eyes.txt")
+                    value=False
+                
+    elif not value:
         with open("ears.txt","w",encoding="utf-8") as f:
             f.write("")
 
-
-
-
-
-
-                #=================================#
-                #--------------ASYNC--------------#
-                #=================================#
-
-async def call_brain():
-#CALL THE PROCESS WITHOUT INTERRUMPTIONS
-    process = await asyncio.create_subprocess_exec('python', 'brain.py',stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE)
-    
-#WAIT THAT FINISHED IN THE BACKGROUND
-    stdout, stderr = await process.communicate()
-    
-    if process.returncode == 0:
-        print("Brain terminó con éxito")
-    else:
-        print(f"Error en Brain: {stderr.decode()}")
-
-                #=================================#
-                #----------ASYNC-SUPORT-----------#
-                #=================================#
-
-async def brain_unlock():
-    await call_brain()
 
 
 
@@ -125,15 +104,13 @@ async def Mevak():
                 with open("news.json", "r",encoding="utf-8") as f:
                     news= json.load(f)
             else:
-                user="google"
+                news="google"
             user=f"Habla sobre este tema: {news}"
 
             doc=nlp(user.lower())
             lemas= [token.lemma_ for token in doc]
             with open("ask.txt", "w", encoding="utf-8") as f:
                     f.write(" ".join(lemas))
-
-            asyncio.create_task(brain_unlock())
 
             if os.path.exists("ears.txt"):
                 os.remove("ears.txt")
@@ -143,8 +120,7 @@ if __name__=="__main__":
     clock=None
     sclock=None
 
-    agent_view()
-
-    agent_actions()
+    while not os.path.exists("ears.txt"):
+        agent_actions()
 
     asyncio.run(Mevak())

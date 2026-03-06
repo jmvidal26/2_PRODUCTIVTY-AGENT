@@ -194,6 +194,7 @@ async def main():
             if input_text=="" and time_elapsed > 10:
                 last_input_time = current_time
                 asyncio.create_task(MVK_unlock())
+                asyncio.create_task(brain_unlock())
                 if os.path.exists("finished.txt") and os.path.exists("response.txt"):
                     with open("response.txt","r",encoding="utf-8") as f:
                         text=f.read()
