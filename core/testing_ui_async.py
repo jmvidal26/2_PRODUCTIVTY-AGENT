@@ -3,6 +3,7 @@ import spacy
 import pygame
 import os
 import time
+import ollama
 
 #============================================================#
 #------------------------VERSION-0.02.0-----by JesVid.DEV----#
@@ -193,6 +194,9 @@ async def main():
             if input_text=="" and time_elapsed > 10:
                 last_input_time = current_time
                 asyncio.create_task(MVK_unlock())
+                if os.path.exists("finished.txt") and os.path.exists("response.txt"):
+                    with open("response.txt","r",encoding="utf-8") as f:
+                        text=f.read()
                 waiting=False
                 pon=True
 
