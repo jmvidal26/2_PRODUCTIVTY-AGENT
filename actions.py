@@ -124,3 +124,5 @@ if __name__=="__main__":
         agent_actions()
 
     asyncio.run(Mevak())
+    if os.path.exists("ears.txt"):
+                os.remove("ears.txt")
