@@ -4,7 +4,6 @@ import spacy
 import pygame
 import os
 import time
-import ollama
 
 #============================================================#
 #------------------------VERSION-0.02.0-----by JesVid.DEV----#

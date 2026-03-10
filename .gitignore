@@ -1,0 +1,11 @@
+.env
+__pycache__/
+chat_history.json
+multimodal.json
+multimodalA.json
+ask.txt
+response.txt
+finished.txt
+Score.txt
+memory_agent.txt
+provitional.txt
