@@ -1,5 +1,6 @@
 .env
 __pycache__/
+.vscode/
 chat_history.json
 multimodal.json
 multimodalA.json
