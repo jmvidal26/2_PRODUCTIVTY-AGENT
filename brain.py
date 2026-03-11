@@ -182,7 +182,7 @@ def agent_WIFI (message):
     prompt_final = f"{base} {feedback_alert}\nREGLAS ADICIONALES:\n{instruction}\nUsuario: {message}"
     
     try:
-        respond = client.models.generate_content(model='gemini-1.5-flash',config={'system_instruction': prompt_final},contents=message)
+        respond = client.models.generate_content(model="gemini-3-flash-preview",config={'system_instruction': prompt_final},contents=message)
 
         respond_text = respond.text
 
