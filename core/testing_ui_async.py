@@ -99,7 +99,9 @@ async def main():
     writting=True
     pon=False
     new_rule=False
+    trate=False
     last_input_time = time.time()
+
 
     running=True
     while running:
@@ -126,7 +128,7 @@ async def main():
 
                     waiting=True
 
-                    asyncio.create_task(brain_unlock())
+                    trate=True
 
     #IN THIS CONTIDITIONAL WE CAN DELETE            
                 elif event.key == pygame.K_BACKSPACE and writting:
@@ -194,12 +196,16 @@ async def main():
             if input_text=="" and time_elapsed > 250 :
                 last_input_time = current_time
                 asyncio.create_task(MVK_unlock())
-                if os.path.exists("ask.txt"):
-                    asyncio.create_task(brain_unlock())
+                trate=True
+
+        if trate:
+            if os.path.exists("ask.txt"):
+                asyncio.create_task(brain_unlock())
                 print("...")
-                waiting=False
-                writting=False
-                pon=True
+            waiting=False
+            writting=False
+            trate=False
+            pon=True
 
         screen.fill("white")
         text_ = font.render(text, True, "black")

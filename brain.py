@@ -257,12 +257,12 @@ if __name__ == "__main__":
                 f.write(f"{respondAI}")
             with open("finished.txt","w",encoding="utf-8") as f:
                 f.write(f"")
-
+            memory_agent(user,respondAI)
             os.remove("ask.txt")
         except Exception as e:
             print(f"THERE IS/ARE A FAIL/S {e}")
 
-    memory_agent(user,respondAI)
+    
     print("\n--- REPORTE DE EVOLUCIÓN (C++) ---")
     ruta_cpp = os.path.join(BASE_PATH, "output", "module_cpp", "memory.exe")
     resultado = subprocess.run([ruta_cpp], capture_output=True, text=True, cwd=os.getcwd())
