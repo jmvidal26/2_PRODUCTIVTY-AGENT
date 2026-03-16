@@ -1,11 +1,13 @@
 import pygame
 import sys
 import random
+import math 
 pygame.init()
 screen = pygame.display.set_mode((1200, 800))
 clocking = pygame.time.Clock()
     #load the font
 font = pygame.font.SysFont('arial', 20)
+font2 = pygame.font.SysFont('arial', 40)
 running=True
 pos_x = 28
 pos_y = 45
@@ -16,6 +18,12 @@ radio_redondeado = 15
 text=""
 control_lines=60
 space_count=[]
+wait=False
+
+#RECTS OF WAITNIG LOOP
+
+anim=0
+bars= [100,100,100]
 
 #THEMES
 
@@ -30,7 +38,7 @@ theme_select=random.choice(select)
 theme=themes[theme_select]
 
 while running:
-  for event in pygame.event.get():
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
@@ -40,7 +48,7 @@ while running:
         
         if event.type == pygame.KEYDOWN:
             mods = pygame.key.get_mods()
-            if event.key == pygame.K_RETURN and (mods & pygame.K_LSHIFT or mods & pygame.K_RSHIFT):
+            if event.key == pygame.K_RETURN and mods & pygame.K_LSHIFT:
                 text += "\n"
                 h_rect += 28
             elif event.key == pygame.K_RETURN:
@@ -69,14 +77,26 @@ while running:
                     text += "\n"
                     h_rect+=28
 
-        screen.fill(theme['color_bg'])
+    if wait:
+        anim+=0.1
+        bars[0]= 70 + 30 * math.sin(anim)
+        bars[1]= 70 + 30 * math.sin(anim + 2)
+        bars[2]= 70 + 30 * math.sin(anim + 4)
+
+        if anim>15:
+            wait=False
+            text=""
+            h_rect=50
+            anim=0
         
+    screen.fill(theme['color_bg'])
+    
+    w_rect, z = font.size(text)
+    
+    text_ = font.render(text, True, theme["color_txt"])
+    
 
-        w_rect, z = font.size(text)
-
-       
-
-        text_ = font.render(text, True, theme["color_txt"])
+    if not wait:
         lines=text.split("\n")
 
         max_w = 0
@@ -85,12 +105,27 @@ while running:
             if w_l > max_w: 
                 max_w = w_l
 
-        pygame.draw.rect(screen, (theme["color_sur"]), (pos_x, pos_y, (max_w+28), h_rect), border_radius=radio_redondeado)
+        if text:
+            pygame.draw.rect(screen, (theme["color_sur"]), (pos_x, pos_y, (max_w+28), h_rect), border_radius=radio_redondeado)
 
-        for i,line in enumerate(lines):
-            surface = font.render(line, True, theme["color_txt"])
-            extra=font.get_height()+5
-            screen.blit(surface ,(x, y + i * extra))
-        pygame.display.flip()
-        clocking.tick(60)
+            for i,line in enumerate(lines):
+                surface = font.render(line, True, theme["color_txt"])
+                extra=font.get_height()+5
+                screen.blit(surface ,(x, y + i * extra))
+
+
+    else:
+        cx, cy = 150, 400
+        colors = [theme["color_sur"], theme["color_extra"], theme["color_ai"]]
+        for i in range(3):
+            bar_y = cy - (bars[i] / 2)
+            pygame.draw.rect(screen, colors[i], (cx + (i * 55), bar_y, 40, bars[i]), border_radius=8)
+            points = (pygame.time.get_ticks() // 500) % 4
+            text_wait = "Esperando" + "." * points
+
+        text_w=font2.render(text_wait, True, theme["color_txt"])
+        screen.blit(text_w,(320,370))
+
+    pygame.display.flip()
+    clocking.tick(60)
 pygame.quit()
