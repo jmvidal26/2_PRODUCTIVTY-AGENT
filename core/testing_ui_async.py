@@ -87,7 +87,7 @@ async def main():
     y=60
     radio_redondeado = 15
     control_lines=60
-    space_count=[]
+    
     #text user
     input_text=""
     nlp=spacy.load("es_core_news_sm")
@@ -128,7 +128,6 @@ async def main():
     writting=True
     pon=False
     new_rule=False
-    trate=False
     last_input_time = time.time()
 
 
@@ -205,9 +204,12 @@ async def main():
                         elif event.key != pygame.K_0:
                             feedback += event.unicode
 
-        if writting and input_text == "" and time_elapsed > 250:
+        if writting and input_text == "" and time_elapsed > 10:
             last_input_time = current_time
             asyncio.create_task(MVK_unlock())
+            if os.path.exists("ask.txt"):
+                writting=False
+                waiting=True
 
         if waiting and os.path.exists("finished.txt"):
             waiting = False
@@ -225,10 +227,6 @@ async def main():
             for i in range(3):
                 bars[i] = 70 + 30 * math.sin(anim + i*2)
                 pygame.draw.rect(screen, colors[i], (cx + (i * 55), cy - (bars[i]/2), 40, bars[i]), border_radius=8)
-            
-            dots = (pygame.time.get_ticks() // 500) % 4
-            tw = font2.render("Esperando" + "."*dots, True, theme["color_txt"])
-            screen.blit(tw, (320, 370))
                                 
             if os.path.exists("finished.txt"):
                 waiting=False
@@ -237,8 +235,8 @@ async def main():
 
         screen.fill(theme['color_bg'])
 
-        if writting:
-            text=input_text
+        if writting and not os.path.exists("ask.txt"):
+          
             lines = input_text.split("\n")
             max_w = 0
             for l in lines:
@@ -254,7 +252,6 @@ async def main():
         elif pon:
             
             current_display = feedback if new_rule else display_text
-            
             surf = font.render(current_display[:100] , True, theme["color_txt"])
             screen.blit(surf, (x, y))
 

@@ -186,8 +186,7 @@ def agent_WIFI (message):
 
         respond_text = respond.text
 
-        history.append({'role': 'user', 'content': message})
-        history.append({'role': 'assistant', 'content': respond_text})
+
 
         if len(history) > 20:
             history.pop(0)
